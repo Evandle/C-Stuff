@@ -6,23 +6,13 @@
 #include <ctype.h>
 #include <string.h>
 
-typedef struct
-{
-    char name[100];
-    char school[100];
-    char gender[100];
-    char gun[100];
-}
-Student;
+#include "Student.h"
 
 int main(void) 
 {
-    char num[100];
-    printf("Give me num: ");
-    scanf("%d", num);
-    Student waterwater[100];
-    waterwater.name = num;
-    printf("You said %d which is pretty %d cool", waterwater, waterwater);
+
+    fgets(Student[1].name, 100, stdin);
+    printf("&s", Student[1].name)
 
     return 0;
 }

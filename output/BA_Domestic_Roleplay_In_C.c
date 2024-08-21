@@ -100,8 +100,8 @@ int Morning1(const char* Player, const char* Maingirl){
     usleep(9000000);
     printf("\"Nope, I was kinda just wandering around thinking about what to do, and before I knew it, I'm right outside of your front door so I decided to invite myself in. I'm not bothering you, am I, %s?\" %s was as casual as ever as she explained that she just seemed to find her way here.\n\n", Player, Maingirl);
     usleep(9000000);
-    printf("%c", choice1("a : Tell the truth. b : Lie.\nc : Yes. d : Say nothing.", List_Choice,
-                    "In my defense Lori asked for it.\n", "Wha... what are you talking about? I have no clue about that.\n", "Yes\n", "...\n",
+    printf("%c", choice1("a : Tell her its alright. b : Tease her abit.\nc : Tell her she's fun. d : Say nothing.", List_Choice,
+                    "No you are not a bother at all.\n", "A little.\n", "It's fun having you around\n", "...\n",
                     Affection_Three, Affection_NegOne, Affection_Two, Affection_NegOne));
     usleep(9000000);
     return 0;

@@ -6,7 +6,7 @@
 
 int main(void) {
     // Initialize the student object
-    Students student;
+    student student;
 
     // Read the student's name from the input
     if (fgets(student.name, 100, stdin) != NULL) {
@@ -20,3 +20,7 @@ int main(void) {
     printf(", and he/she is studying at %s.\n", student.school);
     return 0;
 }
+// added for safe keeping
+ssh -p 2220 bandit0@bandit.labs.overthewire.org bandit0
+if you wanna learn hacking
+pass is bandit0

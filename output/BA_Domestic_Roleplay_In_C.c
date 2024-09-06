@@ -19,14 +19,14 @@ char choice1(char* prompt, char* valid_inputs, char* outputA, char* outputB, cha
         printf("%s\n\n: ", prompt);
         if (fgets(user_input, sizeof(user_input), stdin) != NULL) {
             user_input[strcspn(user_input, "\n")] = '\0';
+
             // Convert user input to lowercase for case-insensitive matching.
             for (int i = 0; user_input[i] != '\0'; i++) {
                 user_input[i] = tolower(user_input[i]);
             }
+
+            // Check if the user input is valid
             if (user_input[0] == '\0' || strchr(valid_inputs, user_input[0]) == NULL) {
-                printf("Invalid input. Please try again.\n");
-            }
-            if (strchr(valid_inputs, user_input[0]) == NULL) {
                 printf("Invalid input. Please try again.\n");
             }
         } 

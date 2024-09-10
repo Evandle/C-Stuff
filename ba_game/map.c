@@ -2,17 +2,22 @@
 #include <time.h>
 #include <conio.h>
 #include <stdio.h>
-#include "student.h"
+#include "data.h"
+#include "map.h"
 #define WIDTH 100
 #define HEIGHT 30
-#define TREE_COUNT 100
+#define TREE_COUNT 400
 #define EMPTY_SPACE ' '
 #define BOUNDARY '#'
 #define PLAYER '@'
+#define NPC 'X'
+#define ENEMY_COUNT 20
+#define VIEW_WIDTH 10
+#define VIEW_HEIGHT 5
 
 char map[HEIGHT][WIDTH];
-int playerX = 1;
-int playerY = 1;
+int playerX = 50;
+int playerY = 15;
 
 // Function to initialize the map with trees
 void init_forest() {
@@ -39,6 +44,17 @@ void init_forest() {
         }
     }
 
+    // Randomly place enemies
+    int placednpcs = 0;
+    while (placednpcs < ENEMY_COUNT) {
+        int npcX = rand() % (WIDTH - 2) + 1;  // Random X (avoid boundaries)
+        int npcY = rand() % (HEIGHT - 2) + 1;  // Random Y (avoid boundaries)
+        if (map[npcY][npcX] == EMPTY_SPACE) {  // Only place an enemy in an empty space
+            map[npcY][npcX] = NPC;  // Use NPC to represent an enemy
+            placednpcs++;
+        }
+    }
+
     // Set the player's initial position
     map[playerY][playerX] = PLAYER;
 }
@@ -47,6 +63,27 @@ void init_forest() {
 void render_map() {
     for (int i = 0; i < HEIGHT; i++) {
         printf("%.*s\n", WIDTH, map[i]);
+    }
+}
+
+// Function to render only the visible part of the map
+void render_view() {
+    int startX = playerX - VIEW_WIDTH / 2;
+    int startY = playerY - VIEW_HEIGHT / 2;
+    int endX = playerX + VIEW_WIDTH / 2;
+    int endY = playerY + VIEW_HEIGHT / 2;
+
+    // Clamp the view to the map boundaries
+    if (startX < 0) startX = 0;
+    if (startY < 0) startY = 0;
+    if (endX > WIDTH) endX = WIDTH;
+    if (endY > HEIGHT) endY = HEIGHT;
+
+    for (int i = startY; i < endY; i++) {
+        for (int j = startX; j < endX; j++) {
+            printf("%c", map[i][j]);
+        }
+        printf("\n");
     }
 }
 

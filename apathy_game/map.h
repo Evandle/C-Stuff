@@ -3,19 +3,24 @@
 
 #define WIDTH 100
 #define HEIGHT 30
-#define TREE_COUNT 400
+
 #define EMPTY_SPACE ' '
 #define BOUNDARY '#'
+#define TREE 'T'  
 #define PLAYER '@'
 #define NPC 'X'
-#define ENEMY_COUNT 20
+
 #define VIEW_WIDTH 10
 #define VIEW_HEIGHT 5
+#define MIN_BOUNDARY 0
+#define MIN_BOUNDARY_VIEW 1
+#define MAX_WIDTH (WIDTH - 1)
+#define MAX_HEIGHT (HEIGHT - 1)
 
 // Function declarations
-void init_forest();
+void init_forest(int TREE_COUNT, int ENEMY_COUNT);
 void render_map();
 void render_view();
-void move_player(char direction);
+char move_player(char direction);
 
 #endif // MAP_H

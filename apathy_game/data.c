@@ -1,9 +1,16 @@
-
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "map.h"
 #include "data.h"
 
+#define MAX_NAME_LENGTH 100
+#define MAX_DESC_LENGTH 256
+
+void init_image(image* imgStruct, const char* name, const char* imgContent) {
+    strcpy(imgStruct->name, name);  // Copy the name
+    strcpy(imgStruct->img, imgContent);  // Copy the image content
+}
 
 void init_stat(stat* s, int vit, int end, int mana, int intelligence, int agility, int luck, int insight, int corruption, int sanity) {
     s->vit = vit;
@@ -17,8 +24,9 @@ void init_stat(stat* s, int vit, int end, int mana, int intelligence, int agilit
     s->sanity = sanity;
 }
 
-void desplay_stat(stat* s) {
-    printf("Vitality: %d\nEndurance: %d\nMana: %d\nIntelligence: %d\nAgility: %d\nLuck: %d\nInsight: %d\nCorruption: %d\nSanity: %d", s->vit, s->end, s->mana, s->intelligence, s->agility, s->luck, s->insight, s->corruption, s->sanity);
+void display_stat(stat* s) {
+    printf("Vitality: %d\nEndurance: %d\nMana: %d\nIntelligence: %d\nAgility: %d\nLuck: %d\nInsight: %d\nCorruption: %d\nSanity: %d\n",
+            s->vit, s->end, s->mana, s->intelligence, s->agility, s->luck, s->insight, s->corruption, s->sanity);
 }
 
 void init_level(level* l, int level, int xpcap, float xpcapmultiplier, float hpmultiplier, float defenseMultiplier, float intelligenceMultiplier, float manamultiplier) {
@@ -31,13 +39,15 @@ void init_level(level* l, int level, int xpcap, float xpcapmultiplier, float hpm
     l->manamultiplier = manamultiplier;
 }
 
-void desplay_level(level *l) {
-    printf("Level: %d\nXp Cap: %d", l->level, l->xpcap);
+void display_level(level* l) {
+    printf("Level: %d\nXp Cap: %d\n", l->level, l->xpcap);
 }
 
 void init_spell(spell* s, const char* name, const char* desc, int damage, float accuracy, int cooldown, int cost, float critchance, float critdamage, float stunchance, int stunduration) {
-    strcpy(s->name, name);
-    strcpy(s->desc, desc);
+    strncpy(s->name, name, MAX_NAME_LENGTH - 1);
+    s->name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
+    strncpy(s->desc, desc, MAX_DESC_LENGTH - 1);
+    s->desc[MAX_DESC_LENGTH - 1] = '\0'; // Ensure null termination
     s->damage = damage;
     s->accuracy = accuracy;
     s->cooldown = cooldown;
@@ -48,50 +58,54 @@ void init_spell(spell* s, const char* name, const char* desc, int damage, float 
     s->stunduration = stunduration;
 }
 
-void desplay_spell(spell* s) {
-    printf("Name: %s\nDescription: %s\nDamage: %d\nAccuracy: %.2f\nCooldown: %d\nCost: %d\nCrit Chance: %.2f\nCrit Damage: %.2f\nStun Chance: %.2f\nStun Duration: %d", s->name, s->desc, s->damage, s->accuracy, s->cooldown, s->cost, s->critchance, s->critdamage, s->stunchance, s->stunduration);
+void display_spell(spell* s) {
+    printf("Name: %s\nDescription: %s\nDamage: %d\nAccuracy: %.2f\nCooldown: %d\nCost: %d\nCrit Chance: %.2f\nCrit Damage: %.2f\nStun Chance: %.2f\nStun Duration: %d\n",
+            s->name, s->desc, s->damage, s->accuracy, s->cooldown, s->cost, s->critchance, s->critdamage, s->stunchance, s->stunduration);
 }
 
-void init_weapon(weapon* w, const char* name, const char* desc, const int dmg, const int dropchance){
-    strcpy(w->name, name);
-    strcpy(w->desc, desc);
+void init_weapon(weapon* w, const char* name, const char* desc, int dmg, int dropchance) {
+    strncpy(w->name, name, MAX_NAME_LENGTH - 1);
+    w->name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
+    strncpy(w->desc, desc, MAX_DESC_LENGTH - 1);
+    w->desc[MAX_DESC_LENGTH - 1] = '\0'; // Ensure null termination
     w->dmg = dmg;
     w->dropchance = dropchance;
 }
 
-void display_weapon(weapon* w){
+void display_weapon(weapon* w) {
     printf("Name: %s\nDescription: %s\nDamage: %d\nDrop Chance: %d\n", w->name, w->desc, w->dmg, w->dropchance);
 }
 
-void init_student(student* s, const char* name, const char* course, int hp, const int def, const float multi, weapon* weapon, level* level, int xp) {
-    strcpy(s->name, name);
-    strcpy(s->course, course);
+void init_student(student* s, const char* name, const char* course, int hp, int def, float multi, weapon* weapon, level* level, int xp, image* img) {
+    strncpy(s->name, name, MAX_NAME_LENGTH - 1);
+    s->name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
+    strncpy(s->course, course, MAX_NAME_LENGTH - 1);
+    s->course[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
     s->hp = hp;
     s->def = def;
     s->multi = multi;
-    s->weapon = *weapon;
-    s->level = *level;
+    s->weapon = *weapon; // Directly assign the weapon struct
+    s->level = *level;   // Directly assign the level struct
     s->xp = xp;
+    s->img = *img;
 }
 
-void init_npc(npc* n, char* name, char* desc, int hp, int def, weapon* weapon, level* level, int xp_drop) {
-    strcpy(n->name, name);
-    strcpy(n->desc, desc);
+void init_npc(npc* n, char* name, char* desc, int hp, int def, weapon* weapon, level* level, int xp_drop, image* img) {
+    strncpy(n->name, name, MAX_NAME_LENGTH - 1);
+    n->name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
+    strncpy(n->desc, desc, MAX_NAME_LENGTH - 1);
+    n->desc[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
     n->hp = hp;
     n->def = def;
-    n->weapon = *weapon;
-    n->level = *level;
+    n->weapon = *weapon; // Directly assign the weapon struct
+    n->level = *level;   // Directly assign the level struct
     n->xp_drop = xp_drop;
-}
-
-void init_image(image* i, char* name, char* img) {
-    strcpy(i->name, name);
-    strcpy(i->img, img);
+    n->img = *img;
 }
 
 
-void display_student(student* s){
-    printf("Name: %s\nCourse: %s\nHP: %d\nDef: %d\nAtk Multi: %.2f\n\n", s->name, s->course, s-> hp, s->def, s->multi);
+void display_student(student* s) {
+    printf("Name: %s\nCourse: %s\nHP: %d\nDef: %d\nAtk Multi: %.2f\n\n", s->name, s->course, s->hp, s->def, s->multi);
 }
 
 void init_all_stats(stat* DM_stat, stat* BM_stat, stat* K_stat, stat* ME_stat) {
@@ -120,33 +134,27 @@ void init_all_weapons(weapon* Enfield, weapon* MG42, weapon* shotgun, weapon* su
 }
 
 
-void init_all_students(student* DM_Evandle, student* BM_Evandle, student* K_Evandle, student* ME_Evandle, weapon* Enfield, weapon* MG42, weapon* shotgun, weapon* supernova, level* Standard_level) {
+void init_all_students(student* DM_Evandle, student* BM_Evandle, student* K_Evandle, student* ME_Evandle, weapon* Enfield, weapon* MG42, weapon* shotgun, weapon* supernova, level* Standard_level, image* Althea_smol) {
     // Initializing students
-    init_student(DM_Evandle, "Evandle(Doll Maker)", "Mana Constructs", 50, 4, 0.30, Enfield, Standard_level, 0);
-    init_student(BM_Evandle, "Evandle(Battle Dress)", "Magic Application", 40, 5, 0.50, MG42, Standard_level, 0);
-    init_student(K_Evandle, "Evandle(Knight)", "Knight", 70, 7, 0.20, shotgun, Standard_level, 0);
-    init_student(ME_Evandle, "Evandle(Mana Engineer)", "Spell Structures", 40, 3, 0.60, supernova, Standard_level, 0);
+    init_student(DM_Evandle, "Evandle(Doll Maker)", "Mana Constructs", 50, 4, 0.30, Enfield, Standard_level, 0, Althea_smol);
+    init_student(BM_Evandle, "Evandle(Battle Dress)", "Magic Application", 40, 5, 0.50, MG42, Standard_level, 0, Althea_smol);
+    init_student(K_Evandle, "Evandle(Knight)", "Knight", 70, 7, 0.20, shotgun, Standard_level, 0, Althea_smol);
+    init_student(ME_Evandle, "Evandle(Mana Engineer)", "Spell Structures", 40, 3, 0.60, supernova, Standard_level, 0, Althea_smol);
 }
 
-void init_all_npcs(npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, npc* Overlord,npc* Terror, npc* Mystic, level* Standard_level, weapon* Enfield) {
-    init_npc(Nightmare, "Nightmare", "An abomination born from corruption.", 25, 2, Enfield, Standard_level, 10);
-    init_npc(LostOne, "Lost One", "A shadow from a fallen mystic.", 30, 4, Enfield, Standard_level, 20);
-    init_npc(Slime, "Slime", "A sentient sluge born from the rotting flesh of a dead outer god.", 20, 1, Enfield, Standard_level, 20);
-    init_npc(Overlord, "OverLord", "A boss wip", 50, 5, Enfield, Standard_level, 100);
-    init_npc(Terror, "Unknown", "A mystic who has fallen to terror.", 100, 5, Enfield, Standard_level, 200);
-    init_npc(Mystic, "A lost Mob-chan", "Another student from KIvotos who was spirited away.", 50, 4, Enfield, Standard_level, 100);
+void init_all_npcs(npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, npc* Overlord,npc* Terror, npc* Mystic, level* Standard_level, weapon* Enfield, image* Nightmare_icon, image* LostOne_icon, image* Slime_icon) {
+    init_npc(Nightmare, "Nightmare", "An abomination born from corruption.", 25, 2, Enfield, Standard_level, 10, Nightmare_icon);
+    init_npc(LostOne, "Lost One", "A shadow from a fallen mystic.", 30, 4, Enfield, Standard_level, 20, LostOne_icon);
+    init_npc(Slime, "Slime", "A sentient sluge born from the rotting flesh of a dead outer god.", 20, 1, Enfield, Standard_level, 20, Slime_icon);
+    init_npc(Overlord, "OverLord", "A boss wip", 50, 5, Enfield, Standard_level, 100, Slime_icon);
+    init_npc(Terror, "Unknown", "A mystic who has fallen to terror.", 100, 5, Enfield, Standard_level, 200, Slime_icon);
+    init_npc(Mystic, "A lost Mob-chan", "Another student from KIvotos who was spirited away.", 50, 4, Enfield, Standard_level, 100, Slime_icon);
     
 }
 
-void init_all_images(image* EF1) {
+
+void init_all_images(image* EF1, image* Althea_big, image* Althea_smol, image* Nightmare_icon, image* LostOne_icon, image* Slime_icon) {
     init_image(EF1, "The Beginning of Evandle's Wondering", 
-    "..~^::~^!!?^~!^.:::~5~^77^~!::~7?JY?^:~:...................!7~^:::5B7:~P?::^:...!Y~:!55Y7^.:::~:::.\n"
-    "..77~:~!~^^:~?Y7:::^!J!7^~:!^:~?YY?~^::^:....~...........:!?!^:^~?G5~~PP!:::.::~!!^~PG57::^!:^~^^::.\n"
-    "..J5~~^~^:::7!7J?^::.!?!~~:^^~~?YY!7~^^:^^:.:Y7~~......:~??~^::!GPJ~!!?~:::.:^~^7?:!GPY~.~?.~?~^^:..\n"
-    "..JPP5!^::^:|??|7?^.::~7!~::^^7YJJYJ!:^::^^^!5&B^.:::^~!~^^^:^!JY!^!!^^:::::~7?J5^~55J~:~7:~PJ.:^::.\n"
-    "..7PP5~^.::^?Y?!!!~::::^~~^:::!J?!?5?~~77^:^^^Y&GY!^^^~^::^^!!!^::~~~^~^:::^JGPY~!P5~^^:!7JPG5::^::.\n"
-    "..~PG5~~^^^:77Y??|^:^^:.::^:.:^7?!^JY??JYY?~^^:5BJYJ7::^^^::^:~~!777!~^.::^?G5!^7JY!:.:!PBGGG5^::::.\n"
-    "..~Y5Y?J~~::YJ7JYY~^^^~:::.::::~!?^:??^:^!?J???7Y5J75?!!~~~~!7JYJ?!~^:::!?J5Y!~!^^!^::7?5GGG57.::.:.\n"
     "..~5PJ?Y!^:^JP5JYY7^!^^^::.:::::!!^:^~?!:^!!~~~!~7YYYPPGGPP555J?7~^^:^~!!JPJ~::.^~^:^7~JBGG5!^:::::.\n"
     ".::7G7^:.::~?^?5555!!7~^:::::.:::::^::^~!::^~~~:::^^^^^^!!~^^^:::::^?YYJJ57:.:~!~:^!~7PBPPPY~^:::::.\n"
     ".:^Y7JY~^~^?^!^7YBPY?~:::^:::::::::::::::~!~:!!!^^^^::::..:::^~7?7J555?~:.^7!!^::^^^P#J7Y??~^::^::.\n"
@@ -178,20 +186,95 @@ void init_all_images(image* EF1) {
     ".:^??~~^^?57?GP?P#YY5^^::~7^..:!:^..:7^........:.~:.........7G&#^....::..7~^~7J!:!BBB5?JJ~?!!7!~~::.\n"
     "..:^^^^.!!!J?75GPBB5BJ~:^:~7:~:?7.::.!^:....:....?~..........:5&~...:.:.^:7!!7G#5BP5J?J!!J~JY~^~.::.\n"
     "...^!7~!:!!7???JPGGP#J7:J^.~!:^P?..::~?:...:^....7^...::.......JJ...^7~.^:^.^?G#G5YJ!!~!?!??^:^:.^:.\n"
-    ":..:!!J?:!YP5Y??P#GBBP^!7~:!~~YY..^:?5..:^......^:...:^....::..:...:7!:::..!#BBGP?7^^?77~:::^~^^:..\n"
-    ".^7^..!~!5^~!!JJYJPBB#B~:Y7??||5?:::.7J::~:.:....::.....^~:.:::.::~::~?7^!7!5#BG5Y7~^!!~:.:~^:^^:..:\n"
-    "..:7!?~^~5P!^.:~7?7JP##P77Y~!?~!?::~~!7^:?:.:^...::.:..^J!:.:^:.::::..!Y?GPP#BGY?7!^~^::~~77^::.:::.\n"
-    "..:^!!JY7?BG!!^^^!??7?5##PG57Y57Y~::~YPY~7.^::...::.~^^YJ~:.^~^:::::^~JYPGPP57?JJ7^:~^^~7J?~^..^7^::\n"
-    "..:.^!~|??5GPG5^~!~7!^!?PBG#5YJYGJ^^~7P?.!^!:^:..^::::5J:...!7!^~^!~?75###GPJ??|^?^:^7?7?^^^~^!?!^:.\n"
-    ":..:~^77~!!??7YP!J!!~~!!~!JP#B55B5!!!!5?.??~:~^^.:^!::7?::^:7YY!~!??G##GBGYYJ!^::^:!Y5?^^!YJ?!~^....\n"
-    "::.:^!^77!7^~~^~7J??PJ~!!~!~?G#B#GYJY!~GY?7?^!~:^~:7:^!G7!~~YBJ^7B#BBBYJ5YJ!!7~7YPPY7~:757!~^^^^::.\n"
-    ".:^^~7?~:..::7!7~:^~!!7!~~^~~~JGGGBBBPP#B5?5!7:7~77?755#PJ?PB#PY5GY?5P5?!~^:?Y?5Y7!^~^!J~..:!~^::...\n"
-    "....:^~~7:.^::~~!^:^::.^~^::^^~7JPGBBP5PGPBGPPJ5PGGGGPYP5PP5?YJJ5Y7777~^^:^^~~~!~^J77!~::^:^~...:...\n"
+    ":..:!!J?:!YP5Y??P#GBBP^!7~:!~~YY..^:?5..:^......^:...:^....::..:...:7!:::..!#BBGP?7^^?77~:::^~^^:..\n");
+    init_image(Althea_big, "Evandle on full shut in nerd mode",
+        "                        .~?JYYJ?!:      \n"
+        "                      .?PBBBBGGGGPJ^    \n"
+        "                     :PGPPPPGPGGGGGG!   \n"
+        "                     PGPPPPPPPPPPPPPG.  \n"
+        "                 ^~^!BP5JJ5GBP5PGGPPP.  \n"
+        " :?!^.           !B##BYJP5GYPGJJJPPGP:. \n"
+        " P&&&#G5?~         7BPPGBBB#PBGGYPGG#BP:\n"
+        "J&&&&&&&&7         YG55G#&&&&##BGPPB?^. \n"
+        "!P#&&&&&J         7BPP5PPB####G5YPGB:   \n"
+        "  :^~7B#.       .JBGPPPGPGBBBBGBGPGG.   \n"
+        " :~!?5&#!      ^PBB&&&##BG!YBB#@&&&#J^  \n"
+        "?YB#&&#&G.    ?GG#@@&&&B#?^BB#@@&@@&@&~ \n"
+        "  :^~G&&@P.  YBPG@&&&&##5.?#&&&&&@@&@@J \n"
+        "     .5@@@B!JBG#&&&&&##P^:G&@@@&@@&@@@P \n"
+        "       5@@@&BP&@&&&&B##7.7#@@@&&#&&@@@B \n"
+        "        Y@@@&&@@&&&###B~.5#@@&&&G#&@@@&^\n"
+        "         5@@@@&@##&###P::P#@@&@@&GB@@&@?\n"
+        "         .Y&@@#5GG#B#BJ::5#@&&@@&BG&&&@B\n"
+        "           :Y5:JGP#GGGP:.7B@&@@@&GG&@@@@\n"
+        "              .B#G&BPGG7:.J@&@@@BPB#&@@@\n"
+        "               ?###BGGGGP?Y&&@@BGG##@@@@\n"
+        "               :#&BB#BB##BGB&@&&#GB&@@@@\n"
+        "               ?@##57?77!!!7#@@@@##&@@@G\n"
+        "              7&&#B!^^~^~~~^Y@@@@@&&@@#:\n"
+        "             ?@@&#J^~~~~~~~~!#@@@@@@&&B \n"
+        "            !&@@#5^~~~~~~~~~~J@@@@@@@@B:\n"
+        "           ~&@@&B!~~~~~~~~~~~~G@@@@@@@@#\n"
+        "          ^#@@@&5^~~~~~~~~~~~~!B@@@@@@@@\n"
+        "         .B@@@@&?^~~~~~~~~~~~~~!#@@@@@@@\n"
+        "         Y@@@@@#7^~~~~~~~~~~~~~~!G@@@@@@\n"
+        "        :&@@@@&B!~~~~~~~~~~~~~~~~~P@@@@@\n");
+    init_image(Althea_smol, "Evandle on full shut in nerd mode, smol version",
+        "      .:~7!!~^:.\n"
+        "        ~5PPY^ \n"
+        "..    :!P5PPG5.\n"
+        "YBG~  .5PB#GP5^\n"
+        "~Y#^ .JBBPG#BY \n"
+        ":!BP~P&&#7B@@@?\n"
+        "  .G@&&#Y?@&#@P\n"
+        "   .JYBBJ7&@B&&\n"
+        "     :#GPJB&B&@\n"
+        "     5#!~~?@@@P\n"
+        "    5@?^~~~5@@#\n"
+        "   ?@&!~~~~~5@@\n");
+    init_image(Nightmare_icon, "An abomination", 
+        "                                            .^. :~.  ^  ::      \n"
+        "                                             ^^.:!^  ~: ::      \n"
+        "                                           . :!~~~~. ^~:~.   .  \n"
+        "                                       ..   ..:!7~7!~!!~: ..:.. \n"
+        "                                        .::^^^^~?!~~~!!~^~^. .. \n"
+        "                                          .^~~!7J~^~^~7~~!~^^:  \n"
+        "                                         .::^^^!7!~~^~~^::... . \n"
+        "                                           .^~~~^~!!!~~~!~~~:.. \n"
+        "                                          .:::^^^~^ ~!~~^:::.   \n"
+        "                                              :::~.  ~~^:       \n"
+        "                                              . .:   .: ..      \n"
+        "                                                ..               \n");
+    init_image(LostOne_icon, "A corrupted human, until the will of an higher entity",
+        "                                                  .^:.          \n"
+        "                                                ^!7PJ?~         \n"
+        "                                                ~^~7~^^         \n"
+        "                                               .~^~^~^~.        \n"
+        "                                               ^^::^::^~        \n"
+        "                                             .^^:^:::^:^^.      \n"
+        "                                            ^~^:^~^^^!^:^~^     \n"
+        "                                           ^~^::^!~~!!^::^~^.   \n"
+        "                                         .~~^^::^~?J?!~^::^~~:  \n"
+        "                                        ^~~^^::~~~?7?!~~^::^~~~.\n");
+    init_image(Slime_icon, "Freaky slime", 
+        "                                           ^^^~~!!~!^^~.   \n"
+        "                                          .^!!~~7?~^!!!:   \n"
+        "                                         :~~~~~~!!!^~~!~^  \n"
+        "                                        ^!7?!!!7777?77!!~. \n"
+        "                                       .~~7JYJ??JJY??JYJ!~.\n"
+        "                                       .~~!?Y5??JJ?7JYJ7~~.\n"
+        "                                        .:^~!JJ??????7!^:. \n"
+        "                                          .::^~7~:!!~^:::. \n"
+        "                                       ::^~~^^^^~~~^^^^^:  \n");
 
-    
-    );
 }
 
+void draw_gui() {
+    // Glitchy ahh GUi, needs changing, its kinda ass.
+    printf("|  > ATTACK        |         > TALK    |\n");
+    printf("|  > RUN           |         > ITEMS   |\n");
+
+}
 
 
 void ichika_image() {

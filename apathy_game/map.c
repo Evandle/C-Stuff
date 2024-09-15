@@ -6,21 +6,26 @@
 #include "map.h"
 #define WIDTH 100
 #define HEIGHT 30
-#define TREE_COUNT 400
+
 #define EMPTY_SPACE ' '
 #define BOUNDARY '#'
+#define TREE 'T'  // New character for trees
 #define PLAYER '@'
 #define NPC 'X'
-#define ENEMY_COUNT 20
+
 #define VIEW_WIDTH 10
 #define VIEW_HEIGHT 5
+#define MIN_BOUNDARY 0
+#define MIN_BOUNDARY_VIEW 1
+#define MAX_WIDTH (WIDTH - 1)
+#define MAX_HEIGHT (HEIGHT - 1)
 
 char map[HEIGHT][WIDTH];
 int playerX = 50;
 int playerY = 15;
 
 // Function to initialize the map with trees
-void init_forest() {
+void init_forest(int TREE_COUNT, int ENEMY_COUNT) {
     // Fill the map with boundaries and empty spaces in a single loop
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
@@ -31,19 +36,16 @@ void init_forest() {
             }
         }
     }
-
     // Randomly place trees in the map
-    srand(time(0));  // Seed the random number generator
     int placedTrees = 0;
     while (placedTrees < TREE_COUNT) {
         int treeX = rand() % (WIDTH - 2) + 1;  // Random X (avoid boundaries)
         int treeY = rand() % (HEIGHT - 2) + 1;  // Random Y (avoid boundaries)
         if (map[treeY][treeX] == EMPTY_SPACE) {  // Only place a tree in an empty space
-            map[treeY][treeX] = BOUNDARY;  // Use BOUNDARY to represent a tree
+            map[treeY][treeX] = TREE;  // Use TREE to represent a tree
             placedTrees++;
         }
     }
-
     // Randomly place enemies
     int placednpcs = 0;
     while (placednpcs < ENEMY_COUNT) {
@@ -54,7 +56,6 @@ void init_forest() {
             placednpcs++;
         }
     }
-
     // Set the player's initial position
     map[playerY][playerX] = PLAYER;
 }
@@ -62,33 +63,57 @@ void init_forest() {
 // Function to render the map
 void render_map() {
     for (int i = 0; i < HEIGHT; i++) {
-        printf("%.*s\n", WIDTH, map[i]);
+        for (int j = 0; j < WIDTH; j++) {
+            if (map[i][j] != EMPTY_SPACE) {
+                printf("%c", map[i][j]);
+            }
+        }
+        printf("\n");
     }
 }
 
-// Function to render only the visible part of the map
+// Function to render the map with visible area around the player, make it load faster
 void render_view() {
+    // Calculate the visible area boundaries once
     int startX = playerX - VIEW_WIDTH / 2;
     int startY = playerY - VIEW_HEIGHT / 2;
     int endX = playerX + VIEW_WIDTH / 2;
     int endY = playerY + VIEW_HEIGHT / 2;
 
     // Clamp the view to the map boundaries
-    if (startX < 0) startX = 0;
-    if (startY < 0) startY = 0;
-    if (endX > WIDTH) endX = WIDTH;
-    if (endY > HEIGHT) endY = HEIGHT;
+    if (startX < MIN_BOUNDARY + 1) startX = MIN_BOUNDARY_VIEW;
+    if (startY < MIN_BOUNDARY + 1) startY = MIN_BOUNDARY_VIEW;
+    if (endX > MAX_WIDTH) endX = MAX_WIDTH;
+    if (endY > MAX_HEIGHT) endY = MAX_HEIGHT;
 
-    for (int i = startY; i < endY; i++) {
-        for (int j = startX; j < endX; j++) {
-            printf("%c", map[i][j]);
+    // Prepare a buffer for the output
+    char output[HEIGHT * (WIDTH + 1)]; // +1 for newline characters
+    int index = 0;
+
+    // Render the map
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            // If the current map position is within the player's visible area, show it
+            if (i >= startY && i < endY && j >= startX && j < endX) {
+                output[index++] = map[i][j];
+            } else {
+                // Otherwise, show an empty space (or a fog symbol)
+                output[index++] = ' ';
+            }
         }
-        printf("\n");
+        output[index++] = '\n'; // Newline after each row
     }
+    
+    // Null-terminate the output string
+    output[index] = '\0';
+
+    // Print the entire output at once
+    printf("%s", output);
 }
 
+
 // Function to move the player
-void move_player(char direction) {
+char move_player(char direction) {
     // Calculate the new position based on direction
     int newX = playerX;
     int newY = playerY;
@@ -98,15 +123,24 @@ void move_player(char direction) {
         case 'a': newX--; break; // Move left
         case 'd': newX++; break; // Move right
     }
-
     // Check if the new position is within bounds and not a tree
-    if (newX > 0 && newX < WIDTH - 1 && newY > 0 && newY < HEIGHT - 1) {
-        if (map[newY][newX] != BOUNDARY) {
+    if (newX > MIN_BOUNDARY && newX < MAX_WIDTH && newY > MIN_BOUNDARY && newY < MAX_HEIGHT) {
+        if (map[newY][newX] != BOUNDARY && map[newY][newX] != TREE && map[newY][newX] != NPC) { // Check for trees
             // Move the player to the new position
             map[playerY][playerX] = EMPTY_SPACE;  // Clear the old position
             playerX = newX;
             playerY = newY;
             map[playerY][playerX] = PLAYER;  // Set the new position
+            return 'O';
+        }
+        if (map[newY][newX] != BOUNDARY && map[newY][newX] != TREE && map[newY][newX] == NPC) {
+            // Move the player to the new position
+            map[playerY][playerX] = EMPTY_SPACE;  // Clear the old position
+            playerX = newX;
+            playerY = newY;
+            map[playerY][playerX] = PLAYER;  // Set the new position
+            return 'X';
         }
     }
+    return ' ';
 }

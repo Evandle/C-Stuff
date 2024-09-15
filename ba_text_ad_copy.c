@@ -89,7 +89,7 @@ int init_player(student* place_holder, student* student) {
 
 // Start of the game
 int prologue(student* player){
-    system("cls");
+    clear_console("cls");
     // Game loop condition
     bool isRunning = true;
     int battle_count;
@@ -102,7 +102,7 @@ int prologue(student* player){
     // Game start
     text("\"Apathy\"");
     text("A game by Benedict\n");
-    system("cls");
+    clear_console("cls");
 
     imgtext("I jolted awake as I experienced the nauseating feeling of free falling.", EF1.img);
     text("I blankly stared at the starless night sky, it was pretty in an unnerving sort of way. I wonder how I got here, the last thing I remembered was...");
@@ -112,12 +112,12 @@ int prologue(student* player){
     text("'It's not like I where aiming for the dam thing, but that hooded asshole was just in front of it.'");
     text("Now that I'm fully awake gravity of the situation finally kicked in my nausea addled head.");
     text("'Oh fuck!'");
-    system("cls");
+    clear_console("cls");
 
     text("Pain rattled through my entire body as I crash through multiple leaves, branches, and finally a thick bush. Luckily I manged to cast a levitation spell in time to reduce the force of my fall.");
     text("'What the heck. That hurt allot, now where am I?'");
     text("As I looked around all I see was darkness and dense trees, and a creeping feeling of eyes watching me.");
-    system("cls");
+    clear_console("cls");
     // Game loop
     while (isRunning) {
         // Render the map (from map.c)
@@ -126,12 +126,12 @@ int prologue(student* player){
         input = _getch();  // Use _getch() to get single keypress without enter
         // Process input and move player (from map.c)
         if (input == 'q') {
-            system("cls");
+            clear_console("cls");
             isRunning = 0;  // Quit the map
         }
         move_player(input);
         // Clear screen for the next frame
-        system("cls");
+        clear_console("cls");
     }
     player->hp -= (player->weapon.dmg + (player->weapon.dmg * player->multi) - player->def); // prototype attack
     display_student(&*player);

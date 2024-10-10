@@ -4,7 +4,8 @@
         "stdio.h": "c",
         "ctype.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "typeinfo": "c"
     },
     "cSpell.words": [
         "Abidos",

@@ -88,9 +88,8 @@ typedef struct {
     float lvl_multi;
 } npc;
 
-
-
-
+void clear_console(void);
+void draw_ui(int pdice, int edice);
 
 void init_image(image* img, char* name, char* img1, char* img2, char* img3, char* img4, char* img5) {
         strcpy(img->name, name);
@@ -274,15 +273,30 @@ void draw_gui() {
 
 }
 
+int battle_dice() {
+    srand(time(0));
+    int dice = rand() % 6;
+    int dice_img[6] = { 1, 6, 4, 2, 5, 3};
+        for(int i = 0; i < sizeof(dice_img) / sizeof(dice_img[0]); i++) {
+        draw_ui(dice_img[i], dice_img[i]);
+        usleep(200000);
+        clear_console();
+    }
+    return dice;
+}
 
-
+void draw_ui(int pdice, int edice) {
+printf("/--------------------------------------------------------------------------------\\\n");
+printf("|                   [%d]                  |                   [%d]                  |\n", pdice, edice);
+printf("\\--------------------------------------------------------------------------------/\n");
+}
 
 void move1(image* img, int count) {
     const char* images[MAX_IMAGES] = { img->img1, img->img2, img->img3, img->img4, img->img5};
     printf("%s\n", images[count]);
 }
 
-void clear_console() {
+void clear_console(void) {
     // Use ANSI escape codes for clearing the console
     printf("\033[H\033[J");
 }
@@ -296,8 +310,7 @@ int main() {
     printf("\033[1;34;43mThis is blue text on yellow background\033[0m\n");
     printf("This is default text\n");
 
-    init_image(&test1,
-        "test image",
+    init_image(&test1, "test image",
     "      .:~7!!~^:.\n"
     "        ~5PPY^ \n"
     "..    :!P5PPG5.\n"
@@ -363,7 +376,7 @@ int main() {
     int count = 0;
     clock_t last_time = clock();
 
-    while (1) {
+    while (0) {
         clock_t current_time = clock();
         double elapsed_time = (double)(current_time - last_time) * 1000.0 / CLOCKS_PER_SEC;
 
@@ -375,6 +388,7 @@ int main() {
 
         }
     }
+    printf("%d", battle_dice());
 
     return 0; // Return from main
 }

@@ -10,6 +10,7 @@
 #include "data.h"
 #include "map.h"
 
+#define MAX_IMAGES 5
 #define TARGET_FPS 4
 #define FRAME_TIME 250 // in milliseconds
 
@@ -18,6 +19,7 @@ int character_select(char* prompt, char* valid_inputs, student* DM_Evandle, stud
 void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, image* EF1);
 int init_player(student* place_holder, student* student);
 
+// clear the console
 void clear_console() {
     // Use ANSI escape codes for clearing the console
     printf("\033[H\033[J");
@@ -36,10 +38,122 @@ int imgtext(const char* text, const char* img){
     return 0;
 }
 
+void move1(image* img, int count) {
+    const char* images[MAX_IMAGES] = { img->img1, img->img2, img->img3, img->img4, img->img5};
+    printf("%s\n", images[count]);
+}
+
+// Function to check for critical hit and stun
+void check_combat_effects(float crit_chance, float stun_chance) {
+    // Initialize random number generator
+    srand(time(0));
+
+    // Generate a random number between 0 and 1 for crit and stun chances
+    float crit_roll = rand() % 100;
+    float stun_roll = rand() % 100;
+
+    // Check for critical hit
+    if (crit_roll < crit_chance) {
+        if (stun_roll < stun_chance) {
+            
+        } else {
+
+        }
+    } else {
+        if (stun_roll < stun_chance) {
+
+        } else {
+
+        }
+    }
+}
+
+
+
+int battle_dice(int dice_power) {
+    srand(time(0));
+    int dice = rand() % dice_power;
+
+    return dice;
+}
+
+void spell_select_shift(student* temp, spell* spell){
+    temp->skills.spell1 = *spell;
+}
+
+void player_spell_select(student* player, student* temp) {
+    
+    char input;
+    while (1) {
+        scanf(" %c", &input);
+        switch (tolower(input)) {  // Switch on the first character of input gcc -Wall text_ad.c data.c map.c -o game
+            case 'a':
+                spell_select_shift(temp, &player->skills.spell1);
+                break;
+            case 'b':
+                spell_select_shift(temp, &player->skills.spell2);
+                break;
+            case 'c':
+                spell_select_shift(temp, &player->skills.spell3);
+                break;
+            case 'd':
+                spell_select_shift(temp, &player->skills.spell4);
+                break;
+            case 'e':
+                spell_select_shift(temp, &player->skills.spell5);
+                break;
+            case 'f':
+                spell_select_shift(temp, &player->skills.spell6);
+                break;
+            case 'g':
+                spell_select_shift(temp, &player->skills.spell7);
+                break;
+            case 'h':
+                spell_select_shift(temp, &player->skills.spell8);
+                break;
+            case 'u':
+                spell_select_shift(temp, &player->skills.ult);
+                break;
+            default:
+                printf("Invalid choice. Please select a valid spell.\n");
+                continue;
+        }
+        break;  // Break the loop once a valid spell is selected
+    }
+}
+
+void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp) {
+
+    int chooser = rand() % 3;
+    if (chooser == 0) npctemp->skills.spell1 = enemy->skills.spell1;
+    else if (chooser == 1) npctemp->skills.spell1 = enemy->skills.spell2;
+    else if (chooser == 2) npctemp->skills.spell1 = enemy->skills.spell3;
+    // make the dice power roller for spells
+    // dont forget, its can get buggy, change the ifs value to rolls value
+    int player_dice = (rand() % temp->skills.spell1.spell_power) + player->weapon.dmg;
+    int npc_dice = (rand() % npctemp->skills.spell1.spell_power) + enemy->weapon.dmg;
+
+    if (player_dice >= npc_dice ) {
+        if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0){
+            enemy->hp -= ((player_dice + (player_dice * player->multi)) - enemy->def);
+        }
+    }
+
+    if (player_dice <= npc_dice) {
+        if ((npc_dice - player->def) >= 0) {
+            player->hp -= ((npc_dice) - player->def);
+        }
+    }
+
+}
+
 // battle loop, is in another loop
 void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Enemy3) {
-    clear_console("cls");
-    srand(time(0));
+    clear_console();
+    
+    int count = 0;
+    char input;
+    
     int chooser = rand() % 3; // for random enemy
     if (chooser == 0) *enemy = *Enemy1;
     else if (chooser == 1) *enemy = *Enemy2;
@@ -52,18 +166,43 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
 
         // Update the game state if enough time has passed
         if (elapsed_time >= FRAME_TIME) {
+            student temp;
+            npc npctemp;
             last_time = current_time; // Reset the timer
 
             // Clear the screen and redraw everything
             clear_console("cls");
-            printf("%s", enemy->img.img);
-            printf("%s", player->img.img);
+            //int pdice = battle_dice(player->skills.spell1.spell_power);
+            //int edice = battle_dice(enemy->skills.spell1.spell_power);
+            //dice_clash(pdice, edice);
+            draw_ui(player, enemy);
+            printf("%s", enemy->img.img1);
+            printf("%s", player->img.img1);
             draw_gui();
+            input = _getch();
+            switch (tolower(input)) {
+                case 'a' : {
+                    display_skills(player);
+                    player_spell_select(player, &temp);
+                    dice_clash(player, enemy, &temp, &npctemp);
+                    break;
+                    }
+                case 't' : break;
+                case 'r' : break;
+                case 'i' : break;
+                default: break;
+            }
+            
             printf("%ld", current_time);
             // Here you can add input handling and other game logic
             // For example:
             // scanf(" %c", &input);
             // handle_input(input, player, enemy);
+            count = (count + 1) % MAX_IMAGES;
+            if (player->hp <= 0 || enemy->hp <= 0) {
+                clear_console();
+                break;
+            }
         }
     }
 }
@@ -80,7 +219,7 @@ char check_tile(char check, student* player, npc* enemy, npc* Nightmare, npc* Lo
 void handle_character_selection(char choice, student* selected_student, student* place_holder, char* output) {
     printf("%s%s\n", output, selected_student->name);
     init_player(place_holder, selected_student);
-    printf("%s", place_holder->img.img);
+    printf("%s", place_holder->img.img1);
 }
 
 int character_select(char* prompt, char* valid_inputs, student* DM_Evandle, student* BM_Evandle, student* K_Evandle, student* ME_Evandle, char* output, student* place_holder) {
@@ -129,7 +268,7 @@ void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Sl
     text("A game by Benedict\n");
     clear_console();
 
-    imgtext("I jolted awake as I experienced the nauseating feeling of free falling.", EF1->img);
+    imgtext("I jolted awake as I experienced the nauseating feeling of free falling.", EF1->img1);
     // Prologue text
     char* prologueText1[] = {
         "I blankly stared at the starless night sky, it was pretty in an unnerving sort of way. I wonder how I got here, the last thing I remembered was...",
@@ -168,6 +307,9 @@ void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Sl
             check_tile(move_player(input), &*player, &*enemy, &*Nightmare, &*LostOne, &*Slime); // Move player based on input
         }
         clear_console();
+        if (player->hp <= 0){
+            break;
+        }
     }
     text("Continuing execution after pressing 'q1'.\n");
     printf("Continuing execution after pressing 'q1'.\n");
@@ -178,28 +320,35 @@ void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Sl
 int main(void){
     // Declaring variables
     student DM_Evandle, BM_Evandle, K_Evandle, ME_Evandle, player;
-    weapon Enfield, MG42, shotgun, supernova;
+    weapon Vandella_Doll, Blue_Regalia, Logic, Wisdom_Cube, natural_weapon;
     npc enemy, Nightmare, LostOne, Slime, Overlord, Terror, Mystic;
     stat DM_stat, BM_stat, K_stat, ME_stat;
     level Standard_level;
-    spell basic_attack;
+    spell basic_attack, tenticle_grab, seed_of_doubt, black_lightning, corrupting_touch, vore, devour;
+    spell doll_slash, doll_artillery, doll_blast, doll_dance;
+    spell precise_strike, energy_burst, cryo_phenix_blast, blades_of_finality;
+    spell sisterhood_style, common_sense, mana_burst, domain_of_stagnation;
+    spell optimized_ice, energy_snipe, heart_of_ice, cube_of_wonder;
+    skills DM_skills, BM_skills, K_skills, ME_skills, NIGH_npc_skills, LOST_npc_skills, SLIM_npc_skills;
     image EF1, Althea_big, Althea_smol, Nightmare_icon, LostOne_icon, Slime_icon;
 
     init_all_images(&EF1, &Althea_big, &Althea_smol, &Nightmare_icon, &LostOne_icon, &Slime_icon);
-    init_all_weapons(&Enfield, &MG42, &shotgun, &supernova);
-    init_all_students(&DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, &Enfield, &MG42, &shotgun, &supernova, &Standard_level, &Althea_smol);
-    init_all_npcs(&enemy, &Nightmare, &LostOne, &Slime, &Overlord, &Terror, &Mystic, &Standard_level, &Enfield, &Nightmare_icon, &LostOne_icon, &Slime_icon);
+    init_all_weapons(&Vandella_Doll, &Blue_Regalia, &Logic, &Wisdom_Cube, &natural_weapon);
     init_all_stats(&DM_stat, &BM_stat, &K_stat, &ME_stat);
     init_all_levels(&Standard_level);
-    init_all_spells(&basic_attack);
-
+    init_all_spells(&basic_attack, &doll_slash, &doll_artillery, &doll_blast, &doll_dance, &precise_strike, &energy_burst, &cryo_phenix_blast, &blades_of_finality, &sisterhood_style, &common_sense, &mana_burst, &domain_of_stagnation, &optimized_ice, &energy_snipe, &heart_of_ice, &cube_of_wonder
+        , &tenticle_grab, &seed_of_doubt, &black_lightning, &corrupting_touch, &vore, &devour);
+    init_standard_skills(&DM_skills, &BM_skills, &K_skills, &ME_skills, &NIGH_npc_skills, &LOST_npc_skills, &SLIM_npc_skills, &basic_attack, &doll_slash, &doll_artillery, &doll_blast, &doll_dance, &precise_strike, &energy_burst, &cryo_phenix_blast, &blades_of_finality, &sisterhood_style, &common_sense, &mana_burst, &domain_of_stagnation, &optimized_ice, &energy_snipe, &heart_of_ice, &cube_of_wonder
+        , &tenticle_grab, &seed_of_doubt, &black_lightning, &corrupting_touch, &vore, &devour);
+    init_all_npcs(&enemy, &Nightmare, &LostOne, &Slime, &Overlord, &Terror, &Mystic, &NIGH_npc_skills, &LOST_npc_skills, &SLIM_npc_skills, &Standard_level, &natural_weapon, &Nightmare_icon, &LostOne_icon, &Slime_icon);
+    init_all_students(&DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, &DM_stat, &BM_stat, &K_stat, &ME_stat, &DM_skills, &BM_skills, &K_skills, &ME_skills, &Vandella_Doll, &Blue_Regalia, &Logic, &Wisdom_Cube, &Standard_level, &Althea_smol);
 
     // Choose your character.
     char List_Choice[] = {'a', 'b', 'c', 'd', '\0'};
     character_select("Who do you want to play as?\n\na: Evandle(Doll Maker)    c: Evandle(Knight)\nb: Evandle(Battle Dress)    d: Evandle(Mana Engineer)", List_Choice,
     &DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, "You have choosen ", &player
     );
-    
+    srand(time(0));
     display_student(&player);
     text("");
     // Prologue

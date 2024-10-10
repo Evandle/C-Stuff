@@ -59,12 +59,12 @@ typedef struct {
     char name[100];
     char desc[256];
     int spell_power;
-    float accuracy;
+    int accuracy;
     int cooldown;
     int cost;
-    float critchance;
-    float critdamage;
-    float stunchance;
+    int critchance;
+    int critdamage;
+    int stunchance;
     int stunduration;
     int corruption;
     int sanity;
@@ -510,58 +510,59 @@ void init_all_levels(level* Standard_level) {
 void init_all_spells(spell* basic_attack, spell* doll_slash, spell* doll_artillery, spell* doll_blast, spell* doll_dance, spell* precise_strike, spell* energy_burst, spell* cryo_phenix_blast, spell* blades_of_finality, spell* sisterhood_style, spell* common_sense, spell* mana_burst, spell* domain_of_stagnation, spell* optimized_ice, spell* energy_snipe, spell* heart_of_ice, spell* cube_of_wonder, spell* tentacle_grab, spell* seed_of_doubt, spell* black_lightning, spell* corrupting_touch, spell* vore, spell* devour) {
     //init_spell(spell* s, const char* name, const char* desc, int spell_power, float accuracy, int cooldown, int cost, float critchance, float critdamage, float stunchance, int stunduration)
     init_spell(basic_attack, "Basic Attack", "A basic attack, cost nothing.", 
-        6, 0.75, 0, 0, 0.25, 2, 0, 0);
+        6, 75, 0, 0, 15, 2, 0, 0);
 
     init_spell(doll_slash, "Doll Slash", "The doll perform a close combat attack.", 
-        6, 0.90, 0, 0, 0.25, 2, 0, 0);
+        6, 90, 0, 0, 25, 2, 0, 0);
     init_spell(doll_artillery, "Doll Artillery", "The doll fires multiple high powered magic barrages.", 
-        10, 0.90, 1, 30, 0.30, 2, 0.25, 1);
+        10, 90, 1, 30, 30, 2, 25, 1);
     init_spell(doll_blast, "Doll's Trick", "The doll fires multiple magic spells.", 
-        8, 0.90, 0, 10, 0.25, 2, 0, 0);
+        8, 90, 0, 10, 25, 2, 0, 0);
     init_spell(doll_dance, "Everlasting Performance", "Makes multiple physical illusions of the doll, then along side with the copies the doll attack with barrages and lazers.", 
-        18, 0.99, 3, 60, 30, 2, 0.25, 2);
+        18, 99, 3, 60, 30, 2, 25, 2);
 
     init_spell(precise_strike, "Precise Strike", "A quick and powerful strike on an enemy's weakness.", 
-        6, 0.95, 0, 0, 0.30, 2, 0, 0);
+        6, 95, 0, 0, 30, 2, 0, 0);
     init_spell(energy_burst, "Energy Burst", "A huge beam of cryo alined energy blast.", 
-        12, 0.95, 1, 35, 0.25, 2, 0.30, 1);
+        12, 95, 1, 35, 25, 2, 30, 1);
     init_spell(cryo_phenix_blast, "Cryo Phenix Blast", "A blast of freezing fire ball.", 
-        8, 0.9, 0, 15, 0.25, 2, 0.25, 1);
+        8, 90, 0, 15, 25, 2, 25, 1);
     init_spell(blades_of_finality, "Blades Of Finality", "Multiple flying blades that freezes their target to absolute zero.",
-        19, 0.95, 3, 75, 0.25, 3, 0.75, 2);
+        19, 95, 3, 75, 25, 3, 75, 2);
 
     init_spell(sisterhood_style, "Sisterhood Style", "The fighting style of the sisterhood, mainly focuses on strong defenses and evasion while delivering powerful strikes when the opportunity shows.",
-        6, 0.90, 0, 0, 0.25, 2, 0, 0);
+        6, 90, 0, 0, 25, 2, 0, 0);
     init_spell(common_sense, "Common sense", "An overwhelming physical force is usually the best defense.",
-        8, 0.90, 1, 0, 0.25, 2, 0.25, 1);
+        8, 90, 1, 0, 25, 2, 25, 1);
     init_spell(mana_burst, "Mana burst", "Uses mana to reinforce and coat her, and using burst of mana to increase the speed and force of attacks.",
-        12, 0.90, 1, 30, 0.30, 3, 0, 0);
+        12, 90, 1, 30, 30, 3, 0, 0);
     init_spell(domain_of_stagnation, "Domain Of Stagnation", "Creates a domain over the curent environment that sucks the heat of everything trapped in it as time passes. Evandle then uses all those gathered heat and launch it as a giant beam of heat.",
-        20, 0.99, 3, 100, 0.25, 2, 0, 0);
+        20, 99, 3, 100, 25, 2, 0, 0);
 
     init_spell(optimized_ice, "Optimized Ice", "A very optimized ice spell, with very high mana use efficiency. Coupled with Evandle's high ice affinity further boosts it's power.", 
-        7, 0.95, 0, 3, 0.30, 2, 0.25, 1);
+        7, 95, 0, 3, 30, 2, 25, 1);
     init_spell(energy_snipe, "Energy Snipe", "High precision concentrated lazer attack, allows the caster to snipe enemies from far away with little deviation on its target location.", 
-        12, 0.99, 1, 40, 0.50, 2, 0, 0);
+        12, 99, 1, 40, 50, 2, 0, 0);
     init_spell(heart_of_ice, "Heart Of Ice", "A powerful burst of nano edge ice from all directions of the caster, creating a deadly flower of death.",
-        15, 0.95, 2, 50, 0.40, 3, 0.50, 2);
+        15, 95, 2, 50, 40, 3, 50, 2);
     init_spell(cube_of_wonder, "Cube Of Wonder", "A giant purple cube that rejects and erases everything it touches. Evandle impowers her Wisdom Cube with her own mana turning it purple and activating the complex and massive spell structure it contains. It was her own little personal project however, it became too complex and powerful for her to cast it herself.",
-        22, 0.95, 4, 100, 0.25, 3, 0, 0);
+        22, 95, 4, 100, 25, 3, 0, 0);
+
     // npc spells tentacle_grab, seed_of_doubt, black_lightning, corrupting_touch, vore, devour
     init_npc_spell(tentacle_grab, "Tentacle Grab", "The abomination grabs it's garget using it's many black slimy tentacles.",
-        6, 0.80, 1, 0, 0.25, 2, 0.50, 1, 0, 0);
+        6, 80, 1, 0, 25, 2, 50, 1, 0, 0);
     init_npc_spell(seed_of_doubt, "Seed Of Doubt", "The nightmare mind rapes and plants a seek of doubt in it's target's mind, lowering their sanity.", 
-        8, 0.90, 1, 0, 0.25, 2, 0, 0, 0, 1);
+        8, 90, 1, 0, 25, 2, 0, 0, 0, 1);
     
     init_npc_spell(black_lightning, "Black Lightning", "Casts a lightning tainted and impowered by corruption.",
-        8, 0.95, 1, 15, 0.30, 2, 0.25, 1, 0, 0);
+        8, 95, 1, 15, 30, 2, 25, 1, 0, 0);
     init_npc_spell(corrupting_touch, "Corrupting Touch", "Spreads the dead outer gods' corruption through touch.",
-        7, 0.75, 1, 0, 0.25, 2, 0, 0, 1, 0);
+        7, 75, 1, 0, 25, 2, 0, 0, 1, 0);
     
     init_npc_spell(vore, "Vore", "Vores the target and dissolves them into nutrition.",
-        7, 0.75, 1, 0, 0.25, 2, 0.50, 1, 0, 0);
+        7, 75, 1, 0, 25, 2, 50, 1, 0, 0);
     init_npc_spell(devour, "Devour", "Devours the target and their essence and existence. Once it dovours a human, it can shapeshift into them.", 
-    10, 0.90, 2, 30, 0.30, 3, 0, 0, 0, 0);
+        10, 90, 2, 30, 30, 3, 0, 0, 0, 0);
 
 }
 
@@ -733,6 +734,25 @@ void init_all_images(image* EF1, image* Althea_big, image* Althea_smol, image* N
 
 }
 
+void draw_dice_animation(int pdice, int npcdice) {
+    printf(
+        "                .:^YP!^:.                      .:^YP!^:.        \n"
+        "             .~7?J5GGPYJJ?~:                .~7?J5GGPYJJ?~:     \n"
+        "          :^!JYYPP7777!PYJPY?!~.         :^!JYYPP7777!PYJPY?!~. \n"
+        "        ^?YYJ?5GGJ755??PGPJ?555J!      ^?YYJ?5GGJ755??PGPJ?555J!\n"
+        "        YGP!~Y5555555555555!~YPPY      YGP!~Y5555555555555!~YPPY\n"
+        "        !?JYP?5GG5YPPJ5GGGJYG??77      !?JYP?5GG5YPPJ5GGGJYG??77\n"
+        "        5J?GGGJYG?^[%d]^YGP?5GGP!5P    5J?GGGJYG?^[%d]^YGP?5GGP!5P\n"
+        "        P7PG?YGYJPPGGPP5?PP5GG5?G      P7PG?YGYJPPGGPP5?PP5GG5?G\n"
+        "        75GY~~YG5?PGGGJJG5!~JGGY?      75GY~~YG5?PGGGJJG5!~JGGY?\n"
+        "        ?PPPPPGGGGJYG?YGGGG5YGPP?      ?PPPPPGGGGJYG?YGGGG5YGPP?\n"
+        "         .~?Y555YYY7~J5YYY55Y?~.        .~?Y555YYY7~J5YYY55Y?~. \n"
+        "            .^7YJ7PG7G5J?!7~.              .^7YJ7PG7G5J?!7~.    \n"
+        "                .~?57P?:.                      .~?57P?:.        \n"
+        , pdice, npcdice
+        );
+}
+
 
 int character_select(char* prompt, char* valid_inputs, student* DM_Evandle, student* BM_Evandle, student* K_Evandle, student* ME_Evandle, char* output, student* place_holder);
 void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, image* EF1);
@@ -854,7 +874,7 @@ void player_spell_select(student* player, student* temp) {
     }
 }
 
-void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp) {
+void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* is_stun, int* npc_is_stun ) {
 
     int chooser = rand() % 3;
     if (chooser == 0) npctemp->skills.spell1 = enemy->skills.spell1;
@@ -865,25 +885,74 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp) {
     int player_dice = (rand() % temp->skills.spell1.spell_power) + player->weapon.dmg;
     int npc_dice = (rand() % npctemp->skills.spell1.spell_power) + enemy->weapon.dmg;
 
-    if (player_dice >= npc_dice ) {
-        if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0){
+    // check for hit
+    int hit_chance = rand() % 100;
+    int is_hit = (hit_chance < temp->skills.spell1.accuracy);
+    int npc_is_hit = (hit_chance < npctemp->skills.spell1.accuracy);
+
+    // Check for critical hit (e.g., 10% chance)
+    int crit_chance = rand() % 100;
+    int is_crit = (crit_chance < temp->skills.spell1.critchance);  // 10% chance for crit
+    int npc_is_crit = (crit_chance < npctemp->skills.spell1.critchance);
+
+    // Check for stun (e.g., 15% chance)
+    int stun_chance = rand() % 100;
+    if (temp->skills.spell1.stunchance != 0){
+        
+        if ((stun_chance < temp->skills.spell1.stunchance)) *is_stun = temp->skills.spell1.stunduration;
+    } 
+    if (npctemp->skills.spell1.stunchance != 0){
+        
+        if ((stun_chance < npctemp->skills.spell1.stunchance)) *npc_is_stun = npctemp->skills.spell1.stunduration;
+    }
+
+    clear_console();
+    printf("        <%s>        |        <%s>        \n\n", temp->skills.spell1.name, npctemp->skills.spell1.name);
+    draw_dice_animation(player_dice, npc_dice);
+    Sleep(3000);
+
+    if (player_dice >= npc_dice && is_hit && *npc_is_stun <= 0) {
+    // Apply critical hit multiplier (e.g., 2x damage)
+        if (is_crit) {
+            player_dice *= temp->skills.spell1.critdamage;  // Critical hit for player
+            printf("Critical dmg by the %s!\n", player->name);
+            Sleep(1000);
+        }
+        if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0) {
             enemy->hp -= ((player_dice + (player_dice * player->multi)) - enemy->def);
         }
     }
 
-    if (player_dice <= npc_dice) {
-        if ((npc_dice - player->def) >= 0) {
+    if (player_dice <= npc_dice && npc_is_hit && *is_stun <= 0) {
+        // Apply critical hit multiplier (e.g., 2x damage)
+        if (npc_is_crit) {
+            npc_dice *= npctemp->skills.spell1.critdamage; 
+            printf("Critical dmg by the %s!\n", enemy->name);
+            Sleep(2000);
+        }
+        if ((npc_dice - player->def) >= 0) {    
             player->hp -= ((npc_dice) - player->def);
         }
+    }
+
+    if (*npc_is_stun > 0) {
+        printf("| Evandle is stunned for %d\n", *npc_is_stun);
+        Sleep(2000);
+        (*npc_is_stun)--;
+    }
+    if (*is_stun > 0) {
+        printf("| Enemy is stunned for %d\n", *is_stun);
+        Sleep(2000);
+        (*is_stun)--;
     }
 
 }
 
 // battle loop, is in another loop
 void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Enemy3) {
-    clear_console("cls");
+    clear_console();
     
-    int count = 0;
+    int count = 0, is_stun = 0, npc_is_stun = 0;
     char input;
     
     int chooser = rand() % 3; // for random enemy
@@ -903,7 +972,7 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
             last_time = current_time; // Reset the timer
 
             // Clear the screen and redraw everything
-            clear_console("cls");
+            clear_console();
             //int pdice = battle_dice(player->skills.spell1.spell_power);
             //int edice = battle_dice(enemy->skills.spell1.spell_power);
             //dice_clash(pdice, edice);
@@ -916,7 +985,7 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
                 case 'a' : {
                     display_skills(player);
                     player_spell_select(player, &temp);
-                    dice_clash(player, enemy, &temp, &npctemp);
+                    dice_clash(player, enemy, &temp, &npctemp, &is_stun, &npc_is_stun);
                     break;
                     }
                 case 't' : break;
@@ -932,7 +1001,7 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
             // handle_input(input, player, enemy);
             count = (count + 1) % MAX_IMAGES;
             if (player->hp <= 0 || enemy->hp <= 0) {
-                clear_console("cls");
+                clear_console();
                 break;
             }
         }

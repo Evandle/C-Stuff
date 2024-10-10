@@ -9,6 +9,7 @@ typedef enum {
     STUN,
     CRIT
 } statuseffect;
+
 typedef struct {
     char name[100];
     char* img1;
@@ -44,12 +45,12 @@ typedef struct {
     char name[100];
     char desc[256];
     int spell_power;
-    float accuracy;
+    int accuracy;
     int cooldown;
     int cost;
-    float critchance;
-    float critdamage;
-    float stunchance;
+    int critchance;
+    int critdamage;
+    int stunchance;
     int stunduration;
     int corruption;
     int sanity;
@@ -108,6 +109,8 @@ typedef struct {
 void draw_ui(student* player, npc* enemy);
 
 void draw_gui();
+
+void draw_dice_animation(int pdice, int npcdice);
 
 void free_image(image* imgStruct);
 

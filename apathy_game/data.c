@@ -169,59 +169,59 @@ void init_all_levels(level* Standard_level) {
 void init_all_spells(spell* basic_attack, spell* doll_slash, spell* doll_artillery, spell* doll_blast, spell* doll_dance, spell* precise_strike, spell* energy_burst, spell* cryo_phenix_blast, spell* blades_of_finality, spell* sisterhood_style, spell* common_sense, spell* mana_burst, spell* domain_of_stagnation, spell* optimized_ice, spell* energy_snipe, spell* heart_of_ice, spell* cube_of_wonder, spell* tentacle_grab, spell* seed_of_doubt, spell* black_lightning, spell* corrupting_touch, spell* vore, spell* devour) {
     //init_spell(spell* s, const char* name, const char* desc, int spell_power, float accuracy, int cooldown, int cost, float critchance, float critdamage, float stunchance, int stunduration)
     init_spell(basic_attack, "Basic Attack", "A basic attack, cost nothing.", 
-        6, 0.75, 0, 0, 0.25, 2, 0, 0);
+        6, 75, 0, 0, 15, 2, 0, 0);
 
     init_spell(doll_slash, "Doll Slash", "The doll perform a close combat attack.", 
-        6, 0.90, 0, 0, 0.25, 2, 0, 0);
+        6, 90, 0, 0, 25, 2, 0, 0);
     init_spell(doll_artillery, "Doll Artillery", "The doll fires multiple high powered magic barrages.", 
-        10, 0.90, 1, 30, 0.30, 2, 0.25, 1);
+        10, 90, 1, 30, 30, 2, 25, 1);
     init_spell(doll_blast, "Doll's Trick", "The doll fires multiple magic spells.", 
-        8, 0.90, 0, 10, 0.25, 2, 0, 0);
+        8, 90, 0, 10, 25, 2, 0, 0);
     init_spell(doll_dance, "Everlasting Performance", "Makes multiple physical illusions of the doll, then along side with the copies the doll attack with barrages and lazers.", 
-        18, 0.99, 3, 60, 30, 2, 0.25, 2);
+        18, 99, 3, 60, 30, 2, 25, 2);
 
     init_spell(precise_strike, "Precise Strike", "A quick and powerful strike on an enemy's weakness.", 
-        6, 0.95, 0, 0, 0.30, 2, 0, 0);
+        6, 95, 0, 0, 30, 2, 0, 0);
     init_spell(energy_burst, "Energy Burst", "A huge beam of cryo alined energy blast.", 
-        12, 0.95, 1, 35, 0.25, 2, 0.30, 1);
+        12, 95, 1, 35, 25, 2, 30, 1);
     init_spell(cryo_phenix_blast, "Cryo Phenix Blast", "A blast of freezing fire ball.", 
-        8, 0.9, 0, 15, 0.25, 2, 0.25, 1);
+        8, 90, 0, 15, 25, 2, 25, 1);
     init_spell(blades_of_finality, "Blades Of Finality", "Multiple flying blades that freezes their target to absolute zero.",
-        19, 0.95, 3, 75, 0.25, 3, 0.75, 2);
+        19, 95, 3, 75, 25, 3, 75, 2);
 
     init_spell(sisterhood_style, "Sisterhood Style", "The fighting style of the sisterhood, mainly focuses on strong defenses and evasion while delivering powerful strikes when the opportunity shows.",
-        6, 0.90, 0, 0, 0.25, 2, 0, 0);
+        6, 90, 0, 0, 25, 2, 0, 0);
     init_spell(common_sense, "Common sense", "An overwhelming physical force is usually the best defense.",
-        8, 0.90, 1, 0, 0.25, 2, 0.25, 1);
+        8, 90, 1, 0, 25, 2, 25, 1);
     init_spell(mana_burst, "Mana burst", "Uses mana to reinforce and coat her, and using burst of mana to increase the speed and force of attacks.",
-        12, 0.90, 1, 30, 0.30, 3, 0, 0);
+        12, 90, 1, 30, 30, 3, 0, 0);
     init_spell(domain_of_stagnation, "Domain Of Stagnation", "Creates a domain over the curent environment that sucks the heat of everything trapped in it as time passes. Evandle then uses all those gathered heat and launch it as a giant beam of heat.",
-        20, 0.99, 3, 100, 0.25, 2, 0, 0);
+        20, 99, 3, 100, 25, 2, 0, 0);
 
     init_spell(optimized_ice, "Optimized Ice", "A very optimized ice spell, with very high mana use efficiency. Coupled with Evandle's high ice affinity further boosts it's power.", 
-        7, 0.95, 0, 3, 0.30, 2, 0.25, 1);
+        7, 95, 0, 3, 30, 2, 25, 1);
     init_spell(energy_snipe, "Energy Snipe", "High precision concentrated lazer attack, allows the caster to snipe enemies from far away with little deviation on its target location.", 
-        12, 0.99, 1, 40, 0.50, 2, 0, 0);
+        12, 99, 1, 40, 50, 2, 0, 0);
     init_spell(heart_of_ice, "Heart Of Ice", "A powerful burst of nano edge ice from all directions of the caster, creating a deadly flower of death.",
-        15, 0.95, 2, 50, 0.40, 3, 0.50, 2);
+        15, 95, 2, 50, 40, 3, 50, 2);
     init_spell(cube_of_wonder, "Cube Of Wonder", "A giant purple cube that rejects and erases everything it touches. Evandle impowers her Wisdom Cube with her own mana turning it purple and activating the complex and massive spell structure it contains. It was her own little personal project however, it became too complex and powerful for her to cast it herself.",
-        22, 0.95, 4, 100, 0.25, 3, 0, 0);
+        22, 95, 4, 100, 25, 3, 0, 0);
 
     // npc spells tentacle_grab, seed_of_doubt, black_lightning, corrupting_touch, vore, devour
     init_npc_spell(tentacle_grab, "Tentacle Grab", "The abomination grabs it's garget using it's many black slimy tentacles.",
-        6, 0.80, 1, 0, 0.25, 2, 0.50, 1, 0, 0);
+        6, 80, 1, 0, 25, 2, 50, 1, 0, 0);
     init_npc_spell(seed_of_doubt, "Seed Of Doubt", "The nightmare mind rapes and plants a seek of doubt in it's target's mind, lowering their sanity.", 
-        8, 0.90, 1, 0, 0.25, 2, 0, 0, 0, 1);
+        8, 90, 1, 0, 25, 2, 0, 0, 0, 1);
     
     init_npc_spell(black_lightning, "Black Lightning", "Casts a lightning tainted and impowered by corruption.",
-        8, 0.95, 1, 15, 0.30, 2, 0.25, 1, 0, 0);
+        8, 95, 1, 15, 30, 2, 25, 1, 0, 0);
     init_npc_spell(corrupting_touch, "Corrupting Touch", "Spreads the dead outer gods' corruption through touch.",
-        7, 0.75, 1, 0, 0.25, 2, 0, 0, 1, 0);
+        7, 75, 1, 0, 25, 2, 0, 0, 1, 0);
     
     init_npc_spell(vore, "Vore", "Vores the target and dissolves them into nutrition.",
-        7, 0.75, 1, 0, 0.25, 2, 0.50, 1, 0, 0);
+        7, 75, 1, 0, 25, 2, 50, 1, 0, 0);
     init_npc_spell(devour, "Devour", "Devours the target and their essence and existence. Once it dovours a human, it can shapeshift into them.", 
-    10, 0.90, 2, 30, 0.30, 3, 0, 0, 0, 0);
+        10, 90, 2, 30, 30, 3, 0, 0, 0, 0);
 
 }
 
@@ -263,7 +263,7 @@ void init_all_students(student* DM_Evandle, student* BM_Evandle, student* K_Evan
 void init_all_npcs(npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, npc* Overlord,npc* Terror, npc* Mystic, skills* NIGH_npc_skills, skills* LOST_npc_skills, skills* SLIM_npc_skills, level* Standard_level, weapon* natural_weapon, image* Nightmare_icon, image* LostOne_icon, image* Slime_icon) {
     init_npc(Nightmare, "Nightmare", "An abomination born from corruption.", 25, 2, natural_weapon, Standard_level, 10, NIGH_npc_skills, Nightmare_icon);
     init_npc(LostOne, "Lost One", "A shadow from a fallen mystic.", 30, 4, natural_weapon, Standard_level, 20, LOST_npc_skills, LostOne_icon);
-    init_npc(Slime, "Slime", "A sentient sluge born from the rotting flesh of a dead outer god.", 20, 1, natural_weapon, Standard_level, 20, SLIM_npc_skills, Slime_icon);
+    init_npc(Slime, "Slime", "A sentient sluge born from the rotting flesh of a dead outer god.", 20, 2, natural_weapon, Standard_level, 20, SLIM_npc_skills, Slime_icon);
     init_npc(Overlord, "OverLord", "A boss wip", 50, 5, natural_weapon, Standard_level, 100, SLIM_npc_skills, Slime_icon);
     init_npc(Terror, "Unknown", "A mystic who has fallen to terror.", 100, 5, natural_weapon, Standard_level, 200, SLIM_npc_skills, Slime_icon);
     init_npc(Mystic, "A lost Mob-chan", "Another student from KIvotos who was spirited away.", 50, 4, natural_weapon, Standard_level, 100, SLIM_npc_skills, Slime_icon);
@@ -396,7 +396,7 @@ void init_all_images(image* EF1, image* Althea_big, image* Althea_smol, image* N
 void draw_ui(student* player, npc* enemy) {
 printf("|[%s]                  |                   [%s]|\n", player->name, enemy->name);
 printf("/--------------------------------------------------------------------------------\\\n");
-printf("|                  [%d]                  |                   [%d]                 |\n", player->hp, enemy->hp);
+printf("|                  [%d]                  |                   [%d]                |\n", player->hp, enemy->hp);
 printf("\\--------------------------------------------------------------------------------/\n");
 }
 
@@ -407,18 +407,22 @@ void draw_gui() {
     
 }
 
-void draw_dice_ani() {
+void draw_dice_animation(int pdice, int npcdice) {
     printf(
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
-        "                             \n"
+        "                .:^YP!^:.                      .:^YP!^:.        \n"
+        "             .~7?J5GGPYJJ?~:                .~7?J5GGPYJJ?~:     \n"
+        "          :^!JYYPP7777!PYJPY?!~.         :^!JYYPP7777!PYJPY?!~. \n"
+        "        ^?YYJ?5GGJ755??PGPJ?555J!      ^?YYJ?5GGJ755??PGPJ?555J!\n"
+        "        YGP!~Y5555555555555!~YPPY      YGP!~Y5555555555555!~YPPY\n"
+        "        !?JYP?5GG5YPPJ5GGGJYG??77      !?JYP?5GG5YPPJ5GGGJYG??77\n"
+        "        5J?GGGJYG?^[%d]^YGP?5GGP!5P    5J?GGGJYG?^[%d]^YGP?5GGP!5P\n"
+        "        P7PG?YGYJPPGGPP5?PP5GG5?G      P7PG?YGYJPPGGPP5?PP5GG5?G\n"
+        "        75GY~~YG5?PGGGJJG5!~JGGY?      75GY~~YG5?PGGGJJG5!~JGGY?\n"
+        "        ?PPPPPGGGGJYG?YGGGG5YGPP?      ?PPPPPGGGGJYG?YGGGG5YGPP?\n"
+        "         .~?Y555YYY7~J5YYY55Y?~.        .~?Y555YYY7~J5YYY55Y?~. \n"
+        "            .^7YJ7PG7G5J?!7~.              .^7YJ7PG7G5J?!7~.    \n"
+        "                .~?57P?:.                      .~?57P?:.        \n"
+        , pdice, npcdice
         );
 }
 

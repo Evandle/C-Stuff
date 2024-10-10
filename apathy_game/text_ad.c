@@ -122,7 +122,7 @@ void player_spell_select(student* player, student* temp) {
     }
 }
 
-void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp) {
+void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* is_stun, int* npc_is_stun ) {
 
     int chooser = rand() % 3;
     if (chooser == 0) npctemp->skills.spell1 = enemy->skills.spell1;
@@ -133,16 +133,65 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp) {
     int player_dice = (rand() % temp->skills.spell1.spell_power) + player->weapon.dmg;
     int npc_dice = (rand() % npctemp->skills.spell1.spell_power) + enemy->weapon.dmg;
 
-    if (player_dice >= npc_dice ) {
-        if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0){
+    // check for hit
+    int hit_chance = rand() % 100;
+    int is_hit = (hit_chance < temp->skills.spell1.accuracy);
+    int npc_is_hit = (hit_chance < npctemp->skills.spell1.accuracy);
+
+    // Check for critical hit (e.g., 10% chance)
+    int crit_chance = rand() % 100;
+    int is_crit = (crit_chance < temp->skills.spell1.critchance);  // 10% chance for crit
+    int npc_is_crit = (crit_chance < npctemp->skills.spell1.critchance);
+
+    // Check for stun (e.g., 15% chance)
+    int stun_chance = rand() % 100;
+    if (temp->skills.spell1.stunchance != 0){
+        
+        if ((stun_chance < temp->skills.spell1.stunchance)) *is_stun = temp->skills.spell1.stunduration;
+    } 
+    if (npctemp->skills.spell1.stunchance != 0){
+        
+        if ((stun_chance < npctemp->skills.spell1.stunchance)) *npc_is_stun = npctemp->skills.spell1.stunduration;
+    }
+
+    clear_console();
+    printf("        <%s>        |        <%s>        \n\n", temp->skills.spell1.name, npctemp->skills.spell1.name);
+    draw_dice_animation(player_dice, npc_dice);
+    Sleep(3000);
+
+    if (player_dice >= npc_dice && is_hit && *npc_is_stun <= 0) {
+    // Apply critical hit multiplier (e.g., 2x damage)
+        if (is_crit) {
+            player_dice *= temp->skills.spell1.critdamage;  // Critical hit for player
+            printf("Critical dmg by the %s!\n", player->name);
+            Sleep(1000);
+        }
+        if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0) {
             enemy->hp -= ((player_dice + (player_dice * player->multi)) - enemy->def);
         }
     }
 
-    if (player_dice <= npc_dice) {
-        if ((npc_dice - player->def) >= 0) {
+    if (player_dice <= npc_dice && npc_is_hit && *is_stun <= 0) {
+        // Apply critical hit multiplier (e.g., 2x damage)
+        if (npc_is_crit) {
+            npc_dice *= npctemp->skills.spell1.critdamage; 
+            printf("Critical dmg by the %s!\n", enemy->name);
+            Sleep(2000);
+        }
+        if ((npc_dice - player->def) >= 0) {    
             player->hp -= ((npc_dice) - player->def);
         }
+    }
+
+    if (*npc_is_stun > 0) {
+        printf("| Evandle is stunned for %d\n", *npc_is_stun);
+        Sleep(2000);
+        (*npc_is_stun)--;
+    }
+    if (*is_stun > 0) {
+        printf("| Enemy is stunned for %d\n", *is_stun);
+        Sleep(2000);
+        (*is_stun)--;
     }
 
 }
@@ -151,7 +200,7 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp) {
 void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Enemy3) {
     clear_console();
     
-    int count = 0;
+    int count = 0, is_stun = 0, npc_is_stun = 0;
     char input;
     
     int chooser = rand() % 3; // for random enemy
@@ -171,7 +220,7 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
             last_time = current_time; // Reset the timer
 
             // Clear the screen and redraw everything
-            clear_console("cls");
+            clear_console();
             //int pdice = battle_dice(player->skills.spell1.spell_power);
             //int edice = battle_dice(enemy->skills.spell1.spell_power);
             //dice_clash(pdice, edice);
@@ -184,7 +233,7 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
                 case 'a' : {
                     display_skills(player);
                     player_spell_select(player, &temp);
-                    dice_clash(player, enemy, &temp, &npctemp);
+                    dice_clash(player, enemy, &temp, &npctemp, &is_stun, &npc_is_stun);
                     break;
                     }
                 case 't' : break;

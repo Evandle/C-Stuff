@@ -22,7 +22,7 @@ int init_player(student* place_holder, student* student);
 // clear the console
 void clear_console() {
     // Use ANSI escape codes for clearing the console
-    printf("\033[H\033[J");
+    system("cls"); 
 }
 
 int text(const char* text){
@@ -122,7 +122,7 @@ void player_spell_select(student* player, student* temp) {
     }
 }
 
-void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* is_stun, int* npc_is_stun ) {
+void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* is_stun, int* npc_is_stun) {
 
     int chooser = rand() % 3;
     if (chooser == 0) npctemp->skills.spell1 = enemy->skills.spell1;
@@ -157,13 +157,13 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* i
     clear_console();
     printf("        <%s>        |        <%s>        \n\n", temp->skills.spell1.name, npctemp->skills.spell1.name);
     draw_dice_animation(player_dice, npc_dice);
-    Sleep(3000);
+    Sleep(1000);
 
     if (player_dice >= npc_dice && is_hit && *npc_is_stun <= 0) {
     // Apply critical hit multiplier (e.g., 2x damage)
         if (is_crit) {
             player_dice *= temp->skills.spell1.critdamage;  // Critical hit for player
-            printf("Critical dmg by the %s!\n", player->name);
+            printf("| Critical dmg by the %s!\n", player->name);
             Sleep(1000);
         }
         if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0) {
@@ -175,25 +175,50 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* i
         // Apply critical hit multiplier (e.g., 2x damage)
         if (npc_is_crit) {
             npc_dice *= npctemp->skills.spell1.critdamage; 
-            printf("Critical dmg by the %s!\n", enemy->name);
-            Sleep(2000);
+            printf("| Critical dmg by the %s!\n", enemy->name);
+            Sleep(1000);
         }
         if ((npc_dice - player->def) >= 0) {    
             player->hp -= ((npc_dice) - player->def);
         }
     }
 
+    if (is_hit == 0) {
+        printf("| %s missed\n", player->name);
+        Sleep(1000);
+    } 
+    if (npc_is_hit == 0) {
+        printf("| %s missed\n", enemy->name);
+        Sleep(1000);
+    }  
+
     if (*npc_is_stun > 0) {
-        printf("| Evandle is stunned for %d\n", *npc_is_stun);
-        Sleep(2000);
+        printf("| Evandle is stunned for %d turns\n", *npc_is_stun);
+        Sleep(1000);
         (*npc_is_stun)--;
     }
     if (*is_stun > 0) {
-        printf("| Enemy is stunned for %d\n", *is_stun);
-        Sleep(2000);
+        printf("| Enemy is stunned for %d turns\n", *is_stun);
+        Sleep(1000);
         (*is_stun)--;
     }
 
+}
+
+void input_control( int input,student* player, npc* enemy, student* temp, npc* npctemp, int* is_stun, int* npc_is_stun) {
+    switch (tolower(input)) {
+        case 'a' : {
+            display_skills(player);
+            player_spell_select(player, temp);
+            dice_clash(player, enemy, temp, npctemp, is_stun, npc_is_stun);
+            input = 'X';
+            break;
+            }
+        case 't' : input = 'X'; break;
+        case 'r' : input = 'X'; break;
+        case 'i' : input = 'X'; break;
+        default: break;
+    }
 }
 
 // battle loop, is in another loop
@@ -229,19 +254,10 @@ void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Ene
             printf("%s", player->img.img1);
             draw_gui();
             input = _getch();
-            switch (tolower(input)) {
-                case 'a' : {
-                    display_skills(player);
-                    player_spell_select(player, &temp);
-                    dice_clash(player, enemy, &temp, &npctemp, &is_stun, &npc_is_stun);
-                    break;
-                    }
-                case 't' : break;
-                case 'r' : break;
-                case 'i' : break;
-                default: break;
-            }
+            input_control(input, player, enemy, &temp, &npctemp, &is_stun, &npc_is_stun);
             
+
+
             printf("%ld", current_time);
             // Here you can add input handling and other game logic
             // For example:
@@ -355,7 +371,7 @@ void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Sl
         } else {
             check_tile(move_player(input), &*player, &*enemy, &*Nightmare, &*LostOne, &*Slime); // Move player based on input
         }
-        clear_console();
+        printf("\033[H\033[J"); // clears screen with less lag but looks ass
         if (player->hp <= 0){
             break;
         }
@@ -367,7 +383,8 @@ void prologue(student* player, npc* enemy, npc* Nightmare, npc* LostOne, npc* Sl
 
 
 int main(void){
-    // Declaring variables
+    clear_console();
+    // Declaring variables  gcc -Wall text_ad.c data.c map.c -o Apathy.exe -lwinmm
     student DM_Evandle, BM_Evandle, K_Evandle, ME_Evandle, player;
     weapon Vandella_Doll, Blue_Regalia, Logic, Wisdom_Cube, natural_weapon;
     npc enemy, Nightmare, LostOne, Slime, Overlord, Terror, Mystic;
@@ -393,6 +410,7 @@ int main(void){
     init_all_students(&DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, &DM_stat, &BM_stat, &K_stat, &ME_stat, &DM_skills, &BM_skills, &K_skills, &ME_skills, &Vandella_Doll, &Blue_Regalia, &Logic, &Wisdom_Cube, &Standard_level, &Althea_smol);
 
     // Choose your character.
+    play_music();
     char List_Choice[] = {'a', 'b', 'c', 'd', '\0'};
     character_select("Who do you want to play as?\n\na: Evandle(Doll Maker)    c: Evandle(Knight)\nb: Evandle(Battle Dress)    d: Evandle(Mana Engineer)", List_Choice,
     &DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, "You have choosen ", &player

@@ -105,6 +105,8 @@ typedef struct {
 } npc;
 
 
+void play_music();
+
 
 void draw_ui(student* player, npc* enemy);
 

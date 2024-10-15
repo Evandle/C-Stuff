@@ -3,9 +3,20 @@
 #include <stdlib.h>
 #include "map.h"
 #include "data.h"
+#include <windows.h>
 
 #define MAX_NAME_LENGTH 100
 #define MAX_DESC_LENGTH 256
+
+
+void play_music() {
+    // Open the mp3 file
+    mciSendString("open \"Ouroboros.mp3\" type mpegvideo alias bgm", NULL, 0, NULL);
+    
+    // Play the mp3 in the background (repeat indefinitely)
+    mciSendString("play bgm repeat", NULL, 0, NULL);
+}
+
 
 void init_image(image* img, char* name, char* img1, char* img2, char* img3, char* img4, char* img5) {
         strcpy(img->name, name);
@@ -80,7 +91,7 @@ void init_npc_spell(spell* s, const char* name, const char* desc, int spell_powe
 }
 
 void display_spell(spell* s) {
-    printf("Name: %s\nDescription: %s\nDamage: %d\nAccuracy: %.2f\nCooldown: %d\nCost: %d\nCrit Chance: %.2f\nCrit Damage: %.2f\nStun Chance: %.2f\nStun Duration: %d\n",
+    printf("Name: %s\nDescription: %s\nDamage: %d\nAccuracy: %d\nCooldown: %d\nCost: %d\nCrit Chance: %d\nCrit Damage: %d\nStun Chance: %d\nStun Duration: %d\n",
             s->name, s->desc, s->spell_power, s->accuracy, s->cooldown, s->cost, s->critchance, s->critdamage, s->stunchance, s->stunduration);
 }
 
@@ -254,10 +265,10 @@ void init_all_weapons(weapon* Vandella_Doll, weapon* Blue_Regalia, weapon* Logic
 
 void init_all_students(student* DM_Evandle, student* BM_Evandle, student* K_Evandle, student* ME_Evandle, stat* DM_stat, stat* BM_stat, stat* K_stat, stat* ME_stat, skills* DM_skills, skills* BM_skills, skills* K_skills, skills* ME_skills, weapon* Vandella_Doll, weapon* Blue_Regalia, weapon* Logic, weapon* Wisdom_Cube, level* Standard_level, image* Althea_smol) {
     // Initializing students
-    init_student(DM_Evandle, "Evandle(Doll Maker)", "Mana Constructs", 50, 3, 0.30, Vandella_Doll, Standard_level, 0, DM_stat, DM_skills, Althea_smol);
-    init_student(BM_Evandle, "Evandle(Battle Dress)", "Magic Application", 40, 4, 0.50, Blue_Regalia, Standard_level, 0, BM_stat, BM_skills, Althea_smol);
-    init_student(K_Evandle, "Evandle(Knight)", "Knight", 70, 5, 0.20, Logic, Standard_level, 0, K_stat, K_skills, Althea_smol);
-    init_student(ME_Evandle, "Evandle(Mana Engineer)", "Spell Structures", 40, 3, 0.60, Wisdom_Cube, Standard_level, 0, ME_stat, ME_skills, Althea_smol);
+    init_student(DM_Evandle, "Evandle(Doll Maker)", "Mana Constructs", 50, 2, 0.30, Vandella_Doll, Standard_level, 0, DM_stat, DM_skills, Althea_smol);
+    init_student(BM_Evandle, "Evandle(Battle Dress)", "Magic Application", 40, 3, 0.50, Blue_Regalia, Standard_level, 0, BM_stat, BM_skills, Althea_smol);
+    init_student(K_Evandle, "Evandle(Knight)", "Knight", 70, 3, 0.20, Logic, Standard_level, 0, K_stat, K_skills, Althea_smol);
+    init_student(ME_Evandle, "Evandle(Mana Engineer)", "Spell Structures", 40, 2, 0.60, Wisdom_Cube, Standard_level, 0, ME_stat, ME_skills, Althea_smol);
 }
 
 void init_all_npcs(npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, npc* Overlord,npc* Terror, npc* Mystic, skills* NIGH_npc_skills, skills* LOST_npc_skills, skills* SLIM_npc_skills, level* Standard_level, weapon* natural_weapon, image* Nightmare_icon, image* LostOne_icon, image* Slime_icon) {
@@ -409,19 +420,11 @@ void draw_gui() {
 
 void draw_dice_animation(int pdice, int npcdice) {
     printf(
-        "                .:^YP!^:.                      .:^YP!^:.        \n"
-        "             .~7?J5GGPYJJ?~:                .~7?J5GGPYJJ?~:     \n"
-        "          :^!JYYPP7777!PYJPY?!~.         :^!JYYPP7777!PYJPY?!~. \n"
-        "        ^?YYJ?5GGJ755??PGPJ?555J!      ^?YYJ?5GGJ755??PGPJ?555J!\n"
-        "        YGP!~Y5555555555555!~YPPY      YGP!~Y5555555555555!~YPPY\n"
-        "        !?JYP?5GG5YPPJ5GGGJYG??77      !?JYP?5GG5YPPJ5GGGJYG??77\n"
-        "        5J?GGGJYG?^[%d]^YGP?5GGP!5P    5J?GGGJYG?^[%d]^YGP?5GGP!5P\n"
-        "        P7PG?YGYJPPGGPP5?PP5GG5?G      P7PG?YGYJPPGGPP5?PP5GG5?G\n"
-        "        75GY~~YG5?PGGGJJG5!~JGGY?      75GY~~YG5?PGGGJJG5!~JGGY?\n"
-        "        ?PPPPPGGGGJYG?YGGGG5YGPP?      ?PPPPPGGGGJYG?YGGGG5YGPP?\n"
-        "         .~?Y555YYY7~J5YYY55Y?~.        .~?Y555YYY7~J5YYY55Y?~. \n"
-        "            .^7YJ7PG7G5J?!7~.              .^7YJ7PG7G5J?!7~.    \n"
-        "                .~?57P?:.                      .~?57P?:.        \n"
+        "               ____________                  ____________      \n"
+        "              /            \\                /            \\       \n"
+        "              |     [%d]    |                |    [%d]     |     \n"
+        "              \\____________/                \\____________/      \n"
+        "                                                                \n"
         , pdice, npcdice
         );
 }

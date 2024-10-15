@@ -5,13 +5,13 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <windows.h>
 #define MAX_NAME_LENGTH 100
 #define MAX_DESC_LENGTH 256
 #define MAX_IMAGES 5
 #define TARGET_FPS 4
 #define FRAME_TIME 250 
 
-#include <windows.h>
 
 #ifndef DATA_H
 #define DATA_H
@@ -348,6 +348,14 @@ char move_player(char direction) {
     return ' ';
 }
 
+void play_music() {
+    // Open the mp3 file
+    mciSendString("open \"Ouroboros.mp3\" type mpegvideo alias bgm", NULL, 0, NULL);
+    
+    // Play the mp3 in the background (repeat indefinitely)
+    mciSendString("play bgm repeat", NULL, 0, NULL);
+}
+
 void init_image(image* img, char* name, char* img1, char* img2, char* img3, char* img4, char* img5) {
         strcpy(img->name, name);
     img->img1 = img1;
@@ -595,10 +603,10 @@ void init_all_weapons(weapon* Vandella_Doll, weapon* Blue_Regalia, weapon* Logic
 
 void init_all_students(student* DM_Evandle, student* BM_Evandle, student* K_Evandle, student* ME_Evandle, stat* DM_stat, stat* BM_stat, stat* K_stat, stat* ME_stat, skills* DM_skills, skills* BM_skills, skills* K_skills, skills* ME_skills, weapon* Vandella_Doll, weapon* Blue_Regalia, weapon* Logic, weapon* Wisdom_Cube, level* Standard_level, image* Althea_smol) {
     // Initializing students
-    init_student(DM_Evandle, "Evandle(Doll Maker)", "Mana Constructs", 50, 3, 0.30, Vandella_Doll, Standard_level, 0, DM_stat, DM_skills, Althea_smol);
-    init_student(BM_Evandle, "Evandle(Battle Dress)", "Magic Application", 40, 4, 0.50, Blue_Regalia, Standard_level, 0, BM_stat, BM_skills, Althea_smol);
-    init_student(K_Evandle, "Evandle(Knight)", "Knight", 70, 5, 0.20, Logic, Standard_level, 0, K_stat, K_skills, Althea_smol);
-    init_student(ME_Evandle, "Evandle(Mana Engineer)", "Spell Structures", 40, 3, 0.60, Wisdom_Cube, Standard_level, 0, ME_stat, ME_skills, Althea_smol);
+    init_student(DM_Evandle, "Evandle(Doll Maker)", "Mana Constructs", 50, 2, 0.30, Vandella_Doll, Standard_level, 0, DM_stat, DM_skills, Althea_smol);
+    init_student(BM_Evandle, "Evandle(Battle Dress)", "Magic Application", 40, 3, 0.50, Blue_Regalia, Standard_level, 0, BM_stat, BM_skills, Althea_smol);
+    init_student(K_Evandle, "Evandle(Knight)", "Knight", 70, 3, 0.20, Logic, Standard_level, 0, K_stat, K_skills, Althea_smol);
+    init_student(ME_Evandle, "Evandle(Mana Engineer)", "Spell Structures", 40, 2, 0.60, Wisdom_Cube, Standard_level, 0, ME_stat, ME_skills, Althea_smol);
 }
 
 void init_all_npcs(npc* enemy, npc* Nightmare, npc* LostOne, npc* Slime, npc* Overlord,npc* Terror, npc* Mystic, skills* NIGH_npc_skills, skills* LOST_npc_skills, skills* SLIM_npc_skills, level* Standard_level, weapon* natural_weapon, image* Nightmare_icon, image* LostOne_icon, image* Slime_icon) {
@@ -736,19 +744,11 @@ void init_all_images(image* EF1, image* Althea_big, image* Althea_smol, image* N
 
 void draw_dice_animation(int pdice, int npcdice) {
     printf(
-        "                .:^YP!^:.                      .:^YP!^:.        \n"
-        "             .~7?J5GGPYJJ?~:                .~7?J5GGPYJJ?~:     \n"
-        "          :^!JYYPP7777!PYJPY?!~.         :^!JYYPP7777!PYJPY?!~. \n"
-        "        ^?YYJ?5GGJ755??PGPJ?555J!      ^?YYJ?5GGJ755??PGPJ?555J!\n"
-        "        YGP!~Y5555555555555!~YPPY      YGP!~Y5555555555555!~YPPY\n"
-        "        !?JYP?5GG5YPPJ5GGGJYG??77      !?JYP?5GG5YPPJ5GGGJYG??77\n"
-        "        5J?GGGJYG?^[%d]^YGP?5GGP!5P    5J?GGGJYG?^[%d]^YGP?5GGP!5P\n"
-        "        P7PG?YGYJPPGGPP5?PP5GG5?G      P7PG?YGYJPPGGPP5?PP5GG5?G\n"
-        "        75GY~~YG5?PGGGJJG5!~JGGY?      75GY~~YG5?PGGGJJG5!~JGGY?\n"
-        "        ?PPPPPGGGGJYG?YGGGG5YGPP?      ?PPPPPGGGGJYG?YGGGG5YGPP?\n"
-        "         .~?Y555YYY7~J5YYY55Y?~.        .~?Y555YYY7~J5YYY55Y?~. \n"
-        "            .^7YJ7PG7G5J?!7~.              .^7YJ7PG7G5J?!7~.    \n"
-        "                .~?57P?:.                      .~?57P?:.        \n"
+        "               ____________                  ____________      \n"
+        "              /            \\                /            \\       \n"
+        "              |     [%d]    |                |    [%d]     |     \n"
+        "              \\____________/                \\____________/      \n"
+        "                                                                \n"
         , pdice, npcdice
         );
 }
@@ -909,13 +909,13 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* i
     clear_console();
     printf("        <%s>        |        <%s>        \n\n", temp->skills.spell1.name, npctemp->skills.spell1.name);
     draw_dice_animation(player_dice, npc_dice);
-    Sleep(3000);
+    Sleep(1000);
 
     if (player_dice >= npc_dice && is_hit && *npc_is_stun <= 0) {
     // Apply critical hit multiplier (e.g., 2x damage)
         if (is_crit) {
             player_dice *= temp->skills.spell1.critdamage;  // Critical hit for player
-            printf("Critical dmg by the %s!\n", player->name);
+            printf("| Critical dmg by the %s!\n", player->name);
             Sleep(1000);
         }
         if (((player_dice + (player_dice * player->multi)) - enemy->def) >= 0) {
@@ -927,22 +927,25 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* i
         // Apply critical hit multiplier (e.g., 2x damage)
         if (npc_is_crit) {
             npc_dice *= npctemp->skills.spell1.critdamage; 
-            printf("Critical dmg by the %s!\n", enemy->name);
-            Sleep(2000);
+            printf("| Critical dmg by the %s!\n", enemy->name);
+            Sleep(1000);
         }
         if ((npc_dice - player->def) >= 0) {    
             player->hp -= ((npc_dice) - player->def);
         }
     }
 
+    if (is_hit == 0) printf("| %s missed\n", player->name); Sleep(2000);
+    if (npc_is_hit == 0) printf("| %s missed\n", enemy->name); Sleep(2000);
+
     if (*npc_is_stun > 0) {
         printf("| Evandle is stunned for %d\n", *npc_is_stun);
-        Sleep(2000);
+        Sleep(1000);
         (*npc_is_stun)--;
     }
     if (*is_stun > 0) {
         printf("| Enemy is stunned for %d\n", *is_stun);
-        Sleep(2000);
+        Sleep(1000);
         (*is_stun)--;
     }
 
@@ -1145,6 +1148,7 @@ int main(void){
     init_all_students(&DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, &DM_stat, &BM_stat, &K_stat, &ME_stat, &DM_skills, &BM_skills, &K_skills, &ME_skills, &Vandella_Doll, &Blue_Regalia, &Logic, &Wisdom_Cube, &Standard_level, &Althea_smol);
 
     // Choose your character.
+    play_music();
     char List_Choice[] = {'a', 'b', 'c', 'd', '\0'};
     character_select("Who do you want to play as?\n\na: Evandle(Doll Maker)    c: Evandle(Knight)\nb: Evandle(Battle Dress)    d: Evandle(Mana Engineer)", List_Choice,
     &DM_Evandle, &BM_Evandle, &K_Evandle, &ME_Evandle, "You have choosen ", &player

@@ -7,8 +7,8 @@
 #include <conio.h> 
 #include <windows.h>
 
-#include "data.h"
-#include "map.h"
+#include "tdata.h"
+#include "tmap.h"
 
 #define MAX_IMAGES 5
 #define TARGET_FPS 4
@@ -205,6 +205,7 @@ void dice_clash(student* player, npc* enemy, student* temp, npc* npctemp, int* i
 
 }
 
+//Controls input for player's GUI
 void input_control( int input,student* player, npc* enemy, student* temp, npc* npctemp, int* is_stun, int* npc_is_stun) {
     switch (tolower(input)) {
         case 'a' : {
@@ -221,7 +222,7 @@ void input_control( int input,student* player, npc* enemy, student* temp, npc* n
     }
 }
 
-// battle loop, is in another loop
+// battle loop, is in another loop    if (_kbhit())
 void init_battle(student* player, npc* enemy, npc* Enemy1, npc* Enemy2, npc* Enemy3) {
     clear_console();
     
